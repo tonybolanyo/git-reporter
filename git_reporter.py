@@ -125,7 +125,7 @@ class GitReporter:
             # Estadísticas
             dev_stats = {
                 'hours': round(sum(sessions), 2),
-                'tasks': len(data['tasks']),
+                'tasks': data['tasks'],  # 🟢 Almacena el conjunto de tareas
                 'sessions': len(sessions),
                 'avg_session': round(statistics.mean(sessions), 2) if sessions else 0,
                 'median_session': round(statistics.median(sessions), 2) if sessions else 0,
@@ -141,7 +141,7 @@ class GitReporter:
         if self.args.report_type == 'summary':
             self.report_data[repo_name]['summary'] = {
                 'total_hours': sum(d['hours'] for d in stats.values()),
-                'total_tasks': len({task for d in stats.values() for task in d.get('tasks', [])}),
+                'total_tasks': len({task for d in stats.values() for task in d.get('tasks', set())}),
                 'total_developers': len(stats)
             }
         elif self.args.report_type == 'detailed':
