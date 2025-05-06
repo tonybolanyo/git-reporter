@@ -10,6 +10,7 @@ Git Repository Analytics Tool es una utilidad de línea de comandos diseñada pa
 
 - **Análisis multi-repositorio**: Escanea directorios con múltiples repositorios Git y genera informes consolidados.
 - **Actualización automática**: Descarga y actualiza todas las ramas y etiquetas desde el remoto `origin` para maximizar los datos analizados.
+- **Filtros por rango de fechas**: Por defecto analiza el último mes completo automáticamente, con opciones para personalizar fechas de inicio y fin.
 - **Tipos de informe personalizables**:
   - Resumen general por repositorio.
   - Estadísticas detalladas por desarrollador.
@@ -34,14 +35,12 @@ Git Repository Analytics Tool es una utilidad de línea de comandos diseñada pa
 pip install -r requirements.txt
 ```
 
-
 **Contenido de `requirements.txt`:**
 
 ```
 python-dateutil>=2.8.0
 GitPython>=3.1.0
 ```
-
 
 3. Asegúrate de tener instalado Python 3.6 o superior.
 
@@ -59,15 +58,6 @@ Contratista Externo
 usuario-externo
 ```
 
-
-### Comandos básicos
-
-
-```
-python git_reporter.py /ruta/al/repositorio_o_directorio [opciones]
-```
-
-
 ### Opciones principales
 
 | Opción               | Descripción                                                   | Ejemplo                                            |
@@ -75,34 +65,32 @@ python git_reporter.py /ruta/al/repositorio_o_directorio [opciones]
 | `-t, --report-type`  | Tipo de informe: `summary`, `detailed`, `tasks` (por defecto `summary`) | `-t detailed`                                     |
 | `-o, --output`       | Salida: `terminal` o `csv` (por defecto `terminal`)           | `-o csv --csv-file reporte.csv`                    |
 | `-u, --update`       | Actualiza todas las ramas y etiquetas desde el remoto `origin` antes de analizar | `-u`                                              |
-| `--start`            | Fecha inicio para filtrar commits (formato `YYYY-MM-DD`)      | `--start 2025-01-01`                               |
-| `--end`              | Fecha fin para filtrar commits (formato `YYYY-MM-DD`)         | `--end 2025-05-07`                                 |
+| `--start`            | Fecha inicio para filtrar commits (formato `YYYY-MM-DD`). Por defecto: primer día del último mes completo | `--start 2025-01-01`                               |
+| `--end`              | Fecha fin para filtrar commits (formato `YYYY-MM-DD`). Por defecto: último día del último mes completo | `--end 2025-05-07`                                 |
 | `--externals-file`   | Archivo con desarrolladores externos (por defecto `externals.txt`) | `--externals-file externos_custom.txt`            |
 | `--task-pattern`     | Patrón regex para identificar tareas (por defecto `[A-Za-z]{2,4}-\d{1,5}`) | `--task-pattern 'RTVE-\d{1,5}'`                   |
 | `--csv-file`         | Nombre del archivo CSV de salida (por defecto `git_report.csv`) | `--csv-file informe_final.csv`                     |
+| `--timeout`          | Tiempo máximo en segundos para actualizar repositorios (default 300s) | `--timeout 600`                                    |
 
 ### Ejemplos de uso
 
-- Informe resumen en terminal para un solo repositorio:
+- Informe resumen en terminal para un solo repositorio, con fechas por defecto (último mes completo):
 
 ```
 python git_reporter.py /ruta/al/repositorio
 ```
 
-
-- Informe detallado en CSV para múltiples repositorios con actualización previa:
+- Informe de tareas con patrón personalizado y exclusión de externos:
 
 ```
-python git_reporter.py /ruta/a/directorio_con_repos -t detailed -o csv -u --csv-file reporte_detallado.csv
+python git_reporter.py /ruta/a/directorio_con_repos -t detailed -o csv -u --csv-file reporte_detallado.csv --start 2025-03-01 --end 2025-03-31
 ```
-
 
 - Informe de tareas con patrón personalizado y exclusión de externos:
 
 ```
 python git_reporter.py /ruta/a/repos -t tasks --task-pattern 'RTVE-\d{1,5}' --externals-file externos.txt
 ```
-
 
 ---
 
@@ -121,5 +109,3 @@ python git_reporter.py /ruta/a/repos -t tasks --task-pattern 'RTVE-\d{1,5}' --ex
 
 **¡Gracias por usar Git Repository Analytics Tool!**  
 Si tienes sugerencias o quieres contribuir, no dudes en abrir un issue o pull request en el repositorio.
-
-
